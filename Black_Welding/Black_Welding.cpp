@@ -22,19 +22,23 @@ Scalar color = Scalar(rng.uniform(0, 256), rng.uniform(0, 256), rng.uniform(0, 2
 void show_histogram(string const& name, Mat1b const& image)
 {
 	float max = 0;
+	int sum_col = 0;
 	for (int i = 0; i < image.cols; i++)
 	{
 		int column_sum = 0;
 		for (int k = 0; k < image.rows; k++)
 		{
 			column_sum += image.at<unsigned char>(k, i);
+
 			if (column_sum > max) {
 				max = column_sum;
 			}
 		}
+		sum_col += column_sum;
 	}
-	//cout << "Max " << max  << endl;
 
+	int sum_AVG = sum_col / (image.cols * image.rows);
+	
 	// Set histogram bins count
 	int bins = image.cols;
 	// Set ranges for histogram bins
@@ -71,35 +75,7 @@ void show_histogram(string const& name, Mat1b const& image)
 		//cout << "AAA " << height << endl;
 	}
 
-
-	float H_AVG = 0;
-	// Loop find Average low
-	for (int i = 0; i < image.cols; i++)
-	{
-		float column_sum = 0;
-
-		for (int k = 0; k < image.rows; k++)
-		{
-			column_sum += image.at<unsigned char>(k, i);
-		}
-
-		float const height = cvRound(column_sum * hist_height / max);
-
-		if (i > (col_high-5) && i <= (col_high + 5) )
-		{
-			cout << "H--" << height << endl;
-			H_AVG += height;
-
-		}
-	}
-	H_AVG = H_AVG / 20;			//best value for average 
-	float H_Minus = H_AVG - high;
-
-	cout << "high " << high << endl;
-	cout << "col high " << col_high << endl;
-	cout << "high Average------ " << H_AVG << endl;
-	cout << "high-- Minus==== " << H_Minus << endl;
-
+	cout << "Average : " << sum_AVG << endl;
 
 
 	Mat canny_output;
@@ -121,7 +97,7 @@ void show_histogram(string const& name, Mat1b const& image)
 	float reN = 0;
 	reN = contourArea(hull[0]) - contourArea(contours[0]);
 	//cout << " Result: " << reN << endl;
-	if (H_AVG > 120) {
+	if ( sum_AVG > 25) {
 		cout << " Defect Detection  " << endl;
 		cout << "===================" << endl;
 	}
@@ -207,7 +183,12 @@ int Recheck(Mat imageOriginal) {
 	croppedRef.copyTo(imgCrop);
 	imshow("REz", imgCrop);
 
+
+
 	Mat imgSobely ;
+	//equalizeHist(imgCrop, imgCrop);
+	resize(imgCrop, imgCrop, Size(imgCrop.cols / 2, imgCrop.rows / 2));
+	imshow("REsize new", imgCrop);
 	Sobel(imgCrop, imgSobely, CV_8U, 0, 1, 3, 1, 0, BORDER_DEFAULT);
 	rotate(imgSobely, imgSobely, ROTATE_90_COUNTERCLOCKWISE);
 

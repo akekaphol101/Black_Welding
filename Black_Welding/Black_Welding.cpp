@@ -13,9 +13,9 @@ using namespace cv;
 using namespace std;
 using namespace std::chrono;
 
-int P_score = 25;
-int P_canny_forward = 110;
-int P_canny_backward = 204;
+int P_score = 25;						//Parameter for check black welding.
+int P_canny_forward = 110;				//Parameter for value forward in canny.
+int P_canny_backward = 204;				//Parameter for value backward in canny.
 
 void show_histogram(string const& name, Mat1b const& image)
 {

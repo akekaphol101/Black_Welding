@@ -12,17 +12,16 @@
 using namespace cv;
 using namespace std;
 using namespace std::chrono;
-int largest_area = 0;
-int largest_contour_index = 0;
-Rect bounding_rect;
-Mat src_gray;
-RNG rng(12345);
-Scalar color = Scalar(rng.uniform(0, 256), rng.uniform(0, 256), rng.uniform(0, 256));
+
+int P_score = 25;
+int P_canny_forward = 110;
+int P_canny_backward = 204;
 
 void show_histogram(string const& name, Mat1b const& image)
 {
 	float max = 0;
 	int sum_col = 0;
+	int sum_AVG = 0;
 	for (int i = 0; i < image.cols; i++)
 	{
 		int column_sum = 0;
@@ -36,8 +35,7 @@ void show_histogram(string const& name, Mat1b const& image)
 		}
 		sum_col += column_sum;
 	}
-
-	int sum_AVG = sum_col / (image.cols * image.rows);
+	sum_AVG = sum_col / (image.cols * image.rows);
 	
 	// Set histogram bins count
 	int bins = image.cols;
@@ -51,32 +49,17 @@ void show_histogram(string const& name, Mat1b const& image)
 	float const hist_height = maxN;
 	Mat3b hist_image = Mat3b::zeros(hist_height + 10, bins + 20);
 
-	int countA = 0;
-	float height_A[630];
-	float high = 0;
-	int col_high = 0;
-	Mat dst;
 	for (int i = 0; i < image.cols; i++)
 	{
 		float column_sum = 0;
-
 		for (int k = 0; k < image.rows; k++)
 		{
 			column_sum += image.at<unsigned char>(k, i);
 		}
-
 		float const height = cvRound(column_sum * hist_height / max);
 		line(hist_image, Point(i + 10, (hist_height - height) + 50), Point(i + 10, hist_height), Scalar::all(255));
-
-		if (height > high) {
-			high = height;
-			col_high = i;
-		}
-		//cout << "AAA " << height << endl;
 	}
-
-	cout << "Average : " << sum_AVG << endl;
-
+	cout << " Average : " << sum_AVG << endl;
 
 	Mat canny_output;
 	Canny(hist_image, canny_output, 50, 50 * 2);
@@ -89,15 +72,8 @@ void show_histogram(string const& name, Mat1b const& image)
 	for (int i = 0; i < contours.size(); i++) {
 		convexHull(Mat(contours[i]), hull[i], 1);
 	}
-
 	drawContours(hist_image, contours, 0, Scalar(0, 0, 255), 2, 8, vector<Vec4i>(), 0, Point());
-	drawContours(hist_image, hull, 0, Scalar(0, 255, 0), 2, 8, vector<Vec4i>(), 0, Point());
-	cout << " AreaC: " << contourArea(contours[0]) << endl;
-	cout << " AreaH: " << contourArea(hull[0]) << endl;
-	float reN = 0;
-	reN = contourArea(hull[0]) - contourArea(contours[0]);
-	//cout << " Result: " << reN << endl;
-	if ( sum_AVG > 25) {
+	if ( sum_AVG > P_score) {
 		cout << " Defect Detection  " << endl;
 		cout << "===================" << endl;
 	}
@@ -115,20 +91,16 @@ void show_histogram(string const& name, Mat1b const& image)
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(stop - start);
 	cout << "Time taken by function: " << duration.count() << " milliseconds" << endl;
-	//imshow(name, hist_image);
 }
 
 
-
-int Recheck(Mat imageOriginal) {
-	Mat imgG, imgC, imgRz, imgTh, imgCanny;
+int Black_Welding(Mat imageOriginal) {
+	Mat imgG, imgC, imgRz, imgTh, imgSobely;;
 	int status = 0;
-	imgRz = imageOriginal.clone();
+	imgRz = imageOriginal.clone();			//Copy image to imgRz.
 	Mat ddst, cdst,cdstP;
 	cvtColor(imgRz, imgG, COLOR_BGR2GRAY);
-	blur(imgG, imgG, Size(3, 3));
-	threshold(imgG, imgTh, 90, 255, THRESH_BINARY_INV); //Threshold the gray.
-	Canny(imgRz, ddst, 110, 204, 3);
+	Canny(imgRz, ddst, P_canny_forward, P_canny_backward, 3);
 	cvtColor(ddst, cdst, COLOR_GRAY2BGR);
 	cdstP = cdst.clone();
 	imshow("Gray", cdst);
@@ -137,9 +109,7 @@ int Recheck(Mat imageOriginal) {
 	for (size_t i = 0; i < linesP.size(); i++)
 	{
 		Vec4i l = linesP[i];
-		//cout << "LINE POINT " << linesP[i] << endl;
 		line(imgRz, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0, 0, 255), 1, 4);
-
 	}
 	Vec4i L = linesP[0];
 	Point p1 = Point(L[0], L[1]), p2 = Point(L[2], L[3]);
@@ -174,41 +144,25 @@ int Recheck(Mat imageOriginal) {
 	imshow("W", imgW);
 	Rect crop_region(40, 0, 540, 80);
 	imgC = imgW(crop_region);
-
 	Rect myROI(10, 20, 200, 50);
 	Mat croppedRef(imgC, myROI);
-
 	Mat imgCrop;
 	// Copy the data into new matrix
 	croppedRef.copyTo(imgCrop);
 	imshow("REz", imgCrop);
 
-
-
-	Mat imgSobely ;
-	//equalizeHist(imgCrop, imgCrop);
 	resize(imgCrop, imgCrop, Size(imgCrop.cols / 2, imgCrop.rows / 2));
-	imshow("REsize new", imgCrop);
 	Sobel(imgCrop, imgSobely, CV_8U, 0, 1, 3, 1, 0, BORDER_DEFAULT);
 	rotate(imgSobely, imgSobely, ROTATE_90_COUNTERCLOCKWISE);
-
 	imshow("Sobel convert ", imgSobely);
-
 	show_histogram("name", imgSobely);
 	return status;
 }
 
 
-
-
-
-
 int main(int argc, const char* argv[]) {
-
-	Mat imgOri;
-	Mat imgRz, imgG, imgCn, imgMr, imgPoLog, imgPoLin, imgRePoLin, imgRePoLog;
-	int recheck = 0;
-
+	Mat imgOri, imgRz;
+	int result = 0;
 	string folder("img/*.jpg");
 	vector<String> fn;
 	glob(folder, fn, false);
@@ -225,16 +179,9 @@ int main(int argc, const char* argv[]) {
 		imgOri = imread(fn[i]);
 		resize(imgOri, imgRz, Size(), 0.5, 0.5); //Half Resize 1280*1040 to 640*520 pixcel.
 
-		recheck = Recheck(imgRz);
-		//imshow("Resize", imgRz);
-		//cout << " Last status" << recheck << endl;
-
+		result = Black_Welding(imgRz);			//Call function check black welding problem.
 		waitKey(0);
 	}
 	waitKey(0);
 	return 0;
-
-
-
-
 }

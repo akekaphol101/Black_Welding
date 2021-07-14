@@ -22,6 +22,7 @@ void show_histogram(string const& name, Mat1b const& image)
 	float max = 0;
 	int sum_col = 0;
 	int sum_AVG = 0;
+
 	for (int i = 0; i < image.cols; i++)
 	{
 		int column_sum = 0;
@@ -155,7 +156,7 @@ int Black_Welding(Mat imageOriginal) {
 	Sobel(imgCrop, imgSobely, CV_8U, 0, 1, 3, 1, 0, BORDER_DEFAULT);
 	rotate(imgSobely, imgSobely, ROTATE_90_COUNTERCLOCKWISE);
 	imshow("Sobel convert ", imgSobely);
-	show_histogram("name", imgSobely);
+	show_histogram("Histogram image", imgSobely);
 	return status;
 }
 
@@ -171,6 +172,10 @@ int main(int argc, const char* argv[]) {
 
 	//Check number of images.
 	cout << "image in folder  " << count << endl;
+
+	 P_score = 25;							//Parameter for check black welding.
+	 P_canny_forward = 110;					//Parameter for value forward in canny.
+	 P_canny_backward = 204;				//Parameter for value backward in canny.
 
 	//Main LooB.
 	for (size_t i = 0; i < count; i++)

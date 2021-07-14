@@ -1,26 +1,26 @@
 ﻿  Black_Welding.cpp
-C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(33,11): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(43,25): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(43,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(50,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(59,31): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(59,22): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
-C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(60,57): warning C4244: 'argument': conversion from 'float' to '_Tp', possible loss of data
+C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(36,11): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(46,25): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(46,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(53,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(62,31): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(62,22): warning C4244: 'initializing': conversion from 'int' to 'const float', possible loss of data
+C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(63,57): warning C4244: 'argument': conversion from 'float' to '_Tp', possible loss of data
           with
           [
               _Tp=int
           ]
-C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(60,78): warning C4244: 'argument': conversion from 'const float' to '_Tp', possible loss of data
+C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(63,78): warning C4244: 'argument': conversion from 'const float' to '_Tp', possible loss of data
           with
           [
               _Tp=int
           ]
-C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(143,47): warning C4244: 'argument': conversion from 'float' to '_Tp', possible loss of data
+C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(145,47): warning C4244: 'argument': conversion from 'float' to '_Tp', possible loss of data
           with
           [
               _Tp=int
           ]
-C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(143,44): warning C4244: 'argument': conversion from 'float' to '_Tp', possible loss of data
+C:\Users\User\Desktop\New_mydev\Black_Welding\Black_Welding\Black_Welding.cpp(145,44): warning C4244: 'argument': conversion from 'float' to '_Tp', possible loss of data
           with
           [
               _Tp=int
